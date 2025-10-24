@@ -815,45 +815,6 @@ alias tl='~/copy.sh > /dev/null 2>&1 \
 alias tlv='~/copy.sh \
             && md5sum ../target_bin/*'
 
-function kh() {
-    if [[ "$PWD" == *$DRIVER6* ]]; then
-        grep -rn "$1" \
-            "./Makefile" \
-            "./src/umac/fullmac/Makefile" \
-            "./src/umac/Makefile" \
-            "./src/umac/lmac_config.mk"
-        return 0
-    elif [[ "$PWD" == *"$DRIVER5"* ]]; then
-        grep -rn "$1" \
-            "./Makefile" \
-            "./src/Makefile" \
-            "./src/fmac/Makefile" \
-            "./src/bb_src/lmac/lmac_config.mk" \
-            "./src/bb_src/umac/umac_config.mk" \
-            "./src/bb_src/umac/fullmac/fullmac.mk"
-        return 0
-    elif [[ "$PWD" == *"$LMAC6"* ]]; then
-        grep -rn "$1" \
-            "./lmac/lmac_config.mk"
-        return 0
-    elif [[ "$PWD" == *"$LMAC5"* ]]; then
-        grep -rn "$1" \
-            "./macsw/lmac_config.mk"
-        return 0
-    elif [ $REPO -eq 1 ]; then
-        echo "=====  Linux config  ====="
-        cat ./sf_kernel/linux-5.10/.config | grep $1
-    elif [ $REPO -eq 0 ]; then
-        echo "=====  Linux config  ====="
-        cat ../linux-4.14.90-dev/linux-4.14.90/.config | grep $1
-    else
-        echo "Not match: current directory does not match any conditions"
-    fi
-    echo -e "\n"
-    echo "===== Openwrt config ====="
-    cat ./.config | grep $1
-}
-
 ##### Change directory
 alias 6='cd ~/code/6/wireless-sw-x2880/lmac_iram'
 alias 5='cd ~/code/5/wireless-sw-sfax8/lmac'
