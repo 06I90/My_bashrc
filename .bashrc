@@ -259,7 +259,6 @@ function wl() {
     | xargs grep -rnw --color=auto -I "$@"
 }
 
-##### Find a macro in WiFi driver Makefile to check it is enabled or not, use @openwrt-x2880-driver or @sf_smac
 function kh() {
     if [[ "$PWD" == *$DRIVER6* ]]; then
         grep -rn "$1" \
@@ -276,6 +275,14 @@ function kh() {
             "./src/bb_src/lmac/lmac_config.mk" \
             "./src/bb_src/umac/umac_config.mk" \
             "./src/bb_src/umac/fullmac/fullmac.mk"
+        return 0
+    elif [[ "$PWD" == *"$LMAC6"* ]]; then
+        grep -rn "$1" \
+            "./lmac/lmac_config.mk"
+        return 0
+    elif [[ "$PWD" == *"$LMAC5"* ]]; then
+        grep -rn "$1" \
+            "./macsw/lmac_config.mk"
         return 0
     elif [ $REPO -eq 1 ]; then
         echo "=====  Linux config  ====="
