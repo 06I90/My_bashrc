@@ -169,8 +169,6 @@ fi
 
 ## 1.1 Grep
 
-EXCLUDE='--exclude "*.o.cmd" --exclude "dictionary" --exclude "*.js" --exclude "*.map" --exclude "*.symvers" --exclude "*.html" --exclude "tags" --exclude "compile_commands.json*" --exclude "sf2880_c906_dasm" --exclude "sf1688_dasm" --exclude "sf2880_c906_map" --exclude "sf1688_map" --exclude "sf2880_c906_readelf"'
-
 
 ### 1.1.1 Only grep in *.c *.h
 
@@ -193,23 +191,44 @@ g() {
 
 ### 1.1.2 General grep
 
-alias f='grep -rnI $EXCLUDE'
-alias w='grep -rnwI $EXCLUDE'
+EXCLUDE=(
+  --exclude '*.o.cmd'
+  --exclude 'dictionary'
+  --exclude '*.js'
+  --exclude '*.map'
+  --exclude '*.symvers'
+  --exclude '*.html'
+  --exclude 'tags'
+  --exclude 'compile_commands.json*'
+  --exclude 'sf2880_c906_dasm'
+  --exclude 'sf1688_dasm'
+  --exclude 'sf2880_c906_map'
+  --exclude 'sf1688_map'
+  --exclude 'sf2880_c906_readelf'
+)
+
+function f() {
+  grep -rnI "${EXCLUDE[@]}" "$@"
+}
+
+function w() {
+  grep -rnI "${EXCLUDE[@]}" "$@"
+}
 
 ##### 查找函数的定义（排除函数调用处）
 function ffd() {
-    grep -rnI  --color=always \
-               $EXCLUDE \
-               -I . \
-               -e "$@" \
+    grep -rnI --color=always \
+              "${EXCLUDE[@]}" \
+              -I . \
+              -e "$@" \
     | grep -v ");"
 }
 
-function ffd() {
-    grep -rnwI --color=always \
-               $EXCLUDE \
-               -I . \
-               -e "$@" \
+function wfd() {
+    grep -rnI --color=always \
+              "${EXCLUDE[@]}" \
+              -I . \
+              -e "$@" \
     | grep -v ");"
 }
 
