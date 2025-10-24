@@ -576,11 +576,11 @@ alias fhbkn='./staging_dir/toolchain*/bin/*musl-objdump -dlS ./sf_kernel/linux-5
 
 
 ##### 打开代码仓库
-o() {
+function o() {
     cd ~/code/$1/Openwrt-master && code . && cd - > /dev/null 2>&1
 }
 
-o5() {
+function o5() {
     cd ~/code/$1/openwrt-18.06 && code . && cd - > /dev/null 2>&1
 }
 
@@ -794,7 +794,8 @@ gg() {
 
 
 
-## WSL 专属
+#######################################################--- WSL ---#######################################################
+
 
 
 if [[ ":$PATH:" != *":/opt/Xuantie-900-gcc-elf-newlib-x86_64-V2.2.5/bin:"* ]]; then
