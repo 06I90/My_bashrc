@@ -772,3 +772,53 @@ gg() {
         echo "Usage: gg <file_path>:<line_number>"
     fi
 }
+
+
+
+## WSL 专属
+
+
+if [[ ":$PATH:" != *":/opt/Xuantie-900-gcc-elf-newlib-x86_64-V2.2.5/bin:"* ]]; then
+    export PATH="$PATH:/opt/Xuantie-900-gcc-elf-newlib-x86_64-V2.2.5/bin"
+fi
+if [[ ":$PATH:" != *":/opt/imgtec/Toolchains/mips-img-elf/2016.05-03/bin:"* ]]; then
+    export PATH="$PATH:/opt/imgtec/Toolchains/mips-img-elf/2016.05-03/bin"
+fi
+
+function by() {
+    if [ $REPO -eq 3 ]; then
+        ./make.sh
+    elif [ $REPO -eq 2 ]; then
+        ./my_install_a28fullmask.sh
+    else
+        echo "Not match: current directory does not match any conditions"
+    fi
+}
+
+alias 66='cd ~/code/6/Openwrt-master'
+alias 55='cd ~/code/5/openwrt-18.06'
+alias 6='cd ~/code/6/wireless-sw-x2880/lmac_iram'
+alias 5='cd ~/code/5/wireless-sw-sfax8/lmac'
+alias cvte='cd ~/code/cvte/wireless-sw-sfax8/lmac'
+alias mpw3='cd ~/code/mpw3/wireless-sw-x2880/lmac_iram'
+
+##### 如果 sshd 没运行，则启动
+if ! pgrep -x "sshd" > /dev/null; then
+     sudo mkdir -p /run/sshd
+     sudo chmod 755 /run/sshd
+     sudo /usr/bin/ssh-keygen -A >/dev/null 2>&1
+     sudo /usr/sbin/sshd
+fi
+
+##### 设置 git 全局代理
+NS_IP=$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}') # 获取 /etc/resolv.conf 中的第一个 nameserver
+if [ -n "$NS_IP" ]; then # 自动设置 git http/https 代理
+    git config --global http.proxy "http://$NS_IP:7897"
+    git config --global https.proxy "http://$NS_IP:7897"
+fi
+
+##### 终端走代理
+# export FORCE_UNSAFE_CONFIGURE=1
+# export http_proxy=http://172.19.208.1:7897
+# export https_proxy=http://172.19.208.1:7897
+# export all_proxy=http://172.19.208.1:7897
