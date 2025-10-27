@@ -212,7 +212,7 @@ function f() {
 }
 
 function w() {
-  grep -rnI "${EXCLUDE[@]}" "$@"
+  grep -rnwI "${EXCLUDE[@]}" "$@"
 }
 
 ##### 查找函数的定义（排除函数调用处）
