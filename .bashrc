@@ -212,7 +212,8 @@ function ffd() {
               "${EXCLUDE[@]}" \
               -I . \
               -e "$@" \
-    | grep -v ");"
+    | grep -v ");" \
+    | grep -v "if "
 }
 
 function wfd() {
@@ -220,7 +221,8 @@ function wfd() {
               "${EXCLUDE[@]}" \
               -I . \
               -e "$@" \
-    | grep -v ");"
+    | grep -v ");" \
+    | grep -v "if "
 }
 
 ##### 在linux仓库使用，排除架构不相关的源码，如果是riscv架构，在./arch目录下只在./arch/riscv下搜索
