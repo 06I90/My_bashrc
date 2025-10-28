@@ -141,9 +141,9 @@ set_REPO_based_on_dir() {
         export REPO=1
     elif [[ "$current_dir" == *$OPENWRT5* ]]; then
         export REPO=0
-    elif [[ "$current_dir" == *$LMAC5* ]]; then
-        export REPO=3
     elif [[ "$current_dir" == *$LMAC6* ]]; then
+        export REPO=3
+    elif [[ "$current_dir" == *$LMAC5* ]]; then
         export REPO=2
     fi
 }
@@ -863,9 +863,9 @@ alias mpw3='cd ~/code/mpw3/wireless-sw-x2880/lmac_iram'
 
 ##### 注意有俩tools文件夹
 function by() {
-    if [ $REPO -eq 2 ]; then
+    if [ $REPO -eq 3 ]; then
         ./make.sh
-    elif [ $REPO -eq 3 ]; then
+    elif [ $REPO -eq 2 ]; then
         ./install_a28fullmask.sh
     else
         echo "Not match: current directory does not match any conditions"
