@@ -461,9 +461,13 @@ gpn() {
     git log --oneline -n "\$1"  # 显示指定数量的提交记录
 }
 
-gps() { # 推送提交到当前分支对应的远程分支
+gps() {
     local remotes_brc_name=$(git branch -avv | grep '*' | awk -F'[][]' '{print $2}' | awk -F'[/:]' '{print $2}')
-    git push origin HEAD:refs/for/$remotes_brc_name
+    if [ $(whoami) == "root" ]; then
+        git push origin $remotes_brc_name
+    else
+        git push origin HEAD:refs/for/$remotes_brc_name
+    fi
 }
 
 ##### --grep=筛选带有字眼的提交记录 --name-only展示涉及的文件名 --oneline显示单行commit_id [tag] theme
