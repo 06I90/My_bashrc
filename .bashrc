@@ -141,9 +141,9 @@ set_REPO_based_on_dir() {
         export REPO=1
     elif [[ "$current_dir" == *$OPENWRT5* ]]; then
         export REPO=0
-    elif [[ "$current_dir" == *$LMAC5* ]]; then
-        export REPO=3
     elif [[ "$current_dir" == *$LMAC6* ]]; then
+        export REPO=3
+    elif [[ "$current_dir" == *$LMAC5* ]]; then
         export REPO=2
     fi
 }
@@ -843,30 +843,6 @@ gg() {
 
 
 
-if [[ ":$PATH:" != *":/opt/Xuantie-900-gcc-elf-newlib-x86_64-V2.2.5/bin:"* ]]; then
-    export PATH="$PATH:/opt/Xuantie-900-gcc-elf-newlib-x86_64-V2.2.5/bin"
-fi
-if [[ ":$PATH:" != *":/opt/imgtec/Toolchains/mips-img-elf/2016.05-03/bin:"* ]]; then
-    export PATH="$PATH:/opt/imgtec/Toolchains/mips-img-elf/2016.05-03/bin"
-fi
-
-function by() {
-    if [ $REPO -eq 3 ]; then
-        ./make.sh
-    elif [ $REPO -eq 2 ]; then
-        ./my_install_a28fullmask.sh
-    else
-        echo "Not match: current directory does not match any conditions"
-    fi
-}
-
-alias 66='cd ~/code/6/Openwrt-master'
-alias 55='cd ~/code/5/openwrt-18.06'
-alias 6='cd ~/code/6/wireless-sw-x2880/lmac_iram'
-alias 5='cd ~/code/5/wireless-sw-sfax8/lmac'
-alias cvte='cd ~/code/cvte/wireless-sw-sfax8/lmac'
-alias mpw3='cd ~/code/mpw3/wireless-sw-x2880/lmac_iram'
-
 ##### 如果 sshd 没运行，则启动
 if ! pgrep -x "sshd" > /dev/null; then
      sudo mkdir -p /run/sshd
@@ -887,3 +863,34 @@ fi
 # export http_proxy=http://172.19.208.1:7897
 # export https_proxy=http://172.19.208.1:7897
 # export all_proxy=http://172.19.208.1:7897
+
+if [[ ":$PATH:" != *":/opt/Xuantie-900-gcc-elf-newlib-x86_64-V2.2.5/bin"* ]]; then
+    export PATH="$PATH:/opt/Xuantie-900-gcc-elf-newlib-x86_64-V2.2.5/bin"
+fi
+
+if [[ ":$PATH:" != *":/opt/imgtec/Toolchains/mips-img-elf/2016.05-03/bin"* ]]; then
+    export PATH="$PATH:/opt/imgtec/Toolchains/mips-img-elf/2016.05-03/bin"
+fi
+
+if [[ ":$PATH:" != *":/root/.local/bin"* ]]; then
+    export PATH="$PATH:/root/.local/bin"
+fi
+
+function by() {
+    if [ $REPO -eq 3 ]; then
+        ./make.sh
+    elif [ $REPO -eq 2 ]; then
+        ./my_install_a28fullmask.sh
+    else
+        echo "Not match: current directory does not match any conditions"
+    fi
+}
+
+alias 66='cd ~/code/6/Openwrt-master'
+alias 55='cd ~/code/5/openwrt-18.06'
+alias 6='cd ~/code/6/wireless-sw-x2880/lmac_iram'
+alias 5='cd ~/code/5/wireless-sw-sfax8/lmac'
+alias cvte='cd ~/code/cvte/wireless-sw-sfax8/lmac'
+alias mpw3='cd ~/code/mpw3/wireless-sw-x2880/lmac_iram'
+
+alias pic='clang-callgraph ./compile_commands.json'
