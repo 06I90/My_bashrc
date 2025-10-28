@@ -149,21 +149,12 @@ set_REPO_based_on_dir() {
 }
 export PROMPT_COMMAND="set_REPO_based_on_dir"
 
-if [[ ":$PATH:" != *":/home/SIFLOWER/jinke.liu/tools/doxygen-1.8.17/build/local/bin/doxygen"* ]]; then
-    export PATH="$PATH:/home/SIFLOWER/jinke.liu/tools/doxygen-1.8.17/build/local/bin/doxygen"
-fi
-
 if [[ ":$PATH:" != *":/home/SIFLOWER/jinke.liu/tools/Bear"* ]]; then
     export PATH="$PATH:/home/SIFLOWER/jinke.liu/tools/Bear"
 fi
 
 # cscope，暂时无法使用
 # CSCOPE_DB="/home/SIFLOWER/jinke.liu/code/6wifi/Openwrt-master/cscope.out"
-
-# sphinx
-if [[ ":$PATH:" != *":/home/SIFLOWER/jinke.liu/.local/bin:"* ]]; then
-    export PATH="$PATH:/home/SIFLOWER/jinke.liu/.local/bin"
-fi
 
 
 
