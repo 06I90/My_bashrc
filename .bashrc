@@ -141,9 +141,9 @@ set_REPO_based_on_dir() {
         export REPO=1
     elif [[ "$current_dir" == *$OPENWRT5* ]]; then
         export REPO=0
-    elif [[ "$current_dir" == *$LMAC5* ]]; then
-        export REPO=3
     elif [[ "$current_dir" == *$LMAC6* ]]; then
+        export REPO=3
+    elif [[ "$current_dir" == *$LMAC5* ]]; then
         export REPO=2
     fi
 }
