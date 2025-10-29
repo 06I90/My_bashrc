@@ -217,10 +217,10 @@ function ffd() {
 }
 
 function wfd() {
-    grep -rnI --color=always \
-              "${EXCLUDE[@]}" \
-              -I . \
-              -e "$@" \
+    grep -rnwI --color=always \
+               "${EXCLUDE[@]}" \
+               -I . \
+               -e "$@" \
     | grep -v ");" \
     | grep -v "if "
 }
