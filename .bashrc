@@ -208,19 +208,19 @@ function w() {
 
 ##### 查找函数的定义（排除函数调用处）
 function ffd() {
-    grep -rnI --color=always \
+    find . -type f \( -name "*.c" -o -name "*.h" \) -print0 | \
+    xargs -0 grep -rnI --color=always \
               "${EXCLUDE[@]}" \
-              -I . \
               -e "$@" \
     | grep -v ");" \
     | grep -v "if "
 }
 
 function wfd() {
-    grep -rnwI --color=always \
-               "${EXCLUDE[@]}" \
-               -I . \
-               -e "$@" \
+    find . -type f \( -name "*.c" -o -name "*.h" \) -print0 | \
+    xargs -0 grep -rnwI --color=always \
+              "${EXCLUDE[@]}" \
+              -e "$@" \
     | grep -v ");" \
     | grep -v "if "
 }
