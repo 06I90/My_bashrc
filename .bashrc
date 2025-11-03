@@ -280,16 +280,16 @@ function fh() {
         return 0
     elif [ $REPO -eq 1 ]; then
         echo "=====  Linux config  ====="
-        cat ./sf_kernel/linux-5.10/.config | grep -rn $1
+        cat ./sf_kernel/linux-5.10/.config | grep -n $1
     elif [ $REPO -eq 0 ]; then
         echo "=====  Linux config  ====="
-        cat ../linux-4.14.90-dev/linux-4.14.90/.config | grep -rn $1
+        cat ../linux-4.14.90-dev/linux-4.14.90/.config | grep -n $1
     else
         echo "Not match: current directory does not match any conditions"
     fi
     echo -e "\n"
     echo "===== Openwrt config ====="
-    cat ./.config | grep -rn $1
+    cat ./.config | grep -n $1
 }
 
 function wh() {
@@ -320,16 +320,16 @@ function wh() {
         return 0
     elif [ $REPO -eq 1 ]; then
         echo "=====  Linux config  ====="
-        cat ./sf_kernel/linux-5.10/.config | grep -rnw $1
+        cat ./sf_kernel/linux-5.10/.config | grep -nw $1
     elif [ $REPO -eq 0 ]; then
         echo "=====  Linux config  ====="
-        cat ../linux-4.14.90-dev/linux-4.14.90/.config | grep -rnw $1
+        cat ../linux-4.14.90-dev/linux-4.14.90/.config | grep -nw $1
     else
         echo "Not match: current directory does not match any conditions"
     fi
     echo -e "\n"
     echo "===== Openwrt config ====="
-    cat ./.config | grep -rnw $1
+    cat ./.config | grep -nw $1
 }
 
 
