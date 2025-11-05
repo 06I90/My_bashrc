@@ -859,5 +859,6 @@ if [ "$(whoami)" = "root" ]; then
             git stash pop >/dev/null 2>&1
         fi
     fi
+    cd - >/dev/null 2>&1
 fi
 # --- End Auto WSL Git Branch Switch ---
