@@ -275,6 +275,8 @@ function fh() {
         return 0
     elif [[ "$PWD" == *"$LMAC5"* ]]; then
         grep -rn "$1" \
+            ./*install*.sh \
+            "./Makefile" \
             "./macsw/lmac_config.mk" \
             "./macsw/ip/lmac/src/siwifi/siwifi_config.h"
         return 0
@@ -836,6 +838,29 @@ gg() {
         echo "Usage: gg <file_path>:<line_number>"
     fi
 }
+
+
+
+# --- Auto WSL Git Branch Switch for root ---
+if [ "$(whoami)" = "root" ]; then
+    cd ~ >/dev/null 2>&1
+
+    # 如果当前目录是一个 Git 仓库
+    if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        current_branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+
+        target_branch="WSL"
+
+        if [ "$current_branch" != "$target_branch" ]; then
+            echo "[AutoSwitch] 当前分支为 '$current_branch'，自动切换到 '$target_branch'..."
+            git stash push -m "AutoSwitch: save work before branch switch" >/dev/null 2>&1
+            git checkout "$target_branch" >/dev/null 2>&1 || \
+                echo "[AutoSwitch] ❌ 切换分支失败，请手动检查"
+            git stash pop >/dev/null 2>&1
+        fi
+    fi
+fi
+# --- End Auto WSL Git Branch Switch ---
 
 #######################################################--- lmac ---#######################################################
 
