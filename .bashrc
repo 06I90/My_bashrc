@@ -213,6 +213,7 @@ function ffd() {
               "${EXCLUDE[@]}" \
               -e "$@" \
     | grep -v ");" \
+    | grep -v "=" \
     | grep -v "if "
 }
 
@@ -222,6 +223,7 @@ function wfd() {
               "${EXCLUDE[@]}" \
               -e "$@" \
     | grep -v ");" \
+    | grep -v "=" \
     | grep -v "if "
 }
 
