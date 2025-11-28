@@ -224,7 +224,8 @@ function wfd() {
               -e "$@" \
     | grep -v ");" \
     | grep -v "=" \
-    | grep -v "if "
+    | grep -v "if (" \
+    | grep -v "if("
 }
 
 ##### 在linux仓库使用，排除架构不相关的源码，如果是riscv架构，在./arch目录下只在./arch/riscv下搜索
@@ -443,7 +444,7 @@ alias gd='git diff'
 alias gp='git pull'
 alias gr='git remote'
 alias grv='git remote -v'
-alias gc='git checkout'
+alias gcl='git checkout' # light version
 alias gcb='git checkout -b' # gcb branch_name origin/remote_branch---拉取远程分支到本地，取名为branch_name
 alias gba='git branch -avv'
 alias gl='git log'
@@ -479,6 +480,21 @@ gps() {
 ##### --grep=筛选带有字眼的提交记录 --name-only展示涉及的文件名 --oneline显示单行commit_id [tag] theme
 cx() {
     git log --grep="$1" --name-only
+}
+
+#### 切分支的时候，先push旧分支的改动，然后切到新分支时，将新分支的改动（如果存在的话）pop出来
+gc() {
+    local stash_name="auto-stash"
+    git stash push -m "$stash_name"
+    git checkout $1
+
+    # 查找指定名称的stash
+    local stash_ref=$(git stash list | grep "$stash_name" | head -1 | cut -d: -f1)
+    if [ -n "$stash_ref" ]; then
+        git stash pop $stash_ref
+    else
+        echo "stash $stash_name is not found."
+    fi
 }
 
 
