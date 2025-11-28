@@ -482,20 +482,28 @@ cx() {
     git log --grep="$1" --name-only
 }
 
-#### 切分支的时候，先push旧分支的改动，然后切到新分支时，将新分支的改动（如果存在的话）pop出来
-mgc() {
-    local stash_name="auto-stash"
-    git stash push -m "$stash_name"
-    git checkout $1
-
-    # 查找指定名称的stash
-    local stash_ref=$(git stash list | grep "$stash_name" | head -1 | cut -d: -f1)
-    if [ -n "$stash_ref" ]; then
-        git stash pop $stash_ref
-    else
-        echo "stash $stash_name is not found."
+wta() {
+    if [ -z "$1" ]; then
+        echo "Usage: wta <branch>"
+        return 1
     fi
+
+    branch="$1"
+    current_dir=$(basename "$PWD")
+    worktree_dir="../${branch}-${current_dir}"
+
+    echo "creat worktree:$worktree_dir  (branch:$branch)"
+
+    if git rev-parse --verify "$branch" >/dev/null 2>&1; then
+        git worktree add "$worktree_dir" "$branch"
+    else
+        git worktree add "$worktree_dir" -b "$branch"
+    fi
+    cd $worktree_dir
 }
+
+alias wtr='git worktree remove'
+alias wtl='git worktree list'
 
 
 
