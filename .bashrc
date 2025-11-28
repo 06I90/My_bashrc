@@ -444,7 +444,7 @@ alias gd='git diff'
 alias gp='git pull'
 alias gr='git remote'
 alias grv='git remote -v'
-alias gcl='git checkout' # light version
+alias gc='git checkout'
 alias gcb='git checkout -b' # gcb branch_name origin/remote_branch---拉取远程分支到本地，取名为branch_name
 alias gba='git branch -avv'
 alias gl='git log'
@@ -483,7 +483,7 @@ cx() {
 }
 
 #### 切分支的时候，先push旧分支的改动，然后切到新分支时，将新分支的改动（如果存在的话）pop出来
-gc() {
+mgc() {
     local stash_name="auto-stash"
     git stash push -m "$stash_name"
     git checkout $1
