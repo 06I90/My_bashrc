@@ -540,6 +540,11 @@ wta() {
     cd $worktree_dir
 }
 
+# proxy [on|off|status|test]
+proxy() {
+    ~/mytools/git-github-proxy.sh $1
+}
+
 alias wtr='git worktree remove'
 alias wtl='git worktree list'
 
