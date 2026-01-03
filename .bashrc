@@ -131,8 +131,8 @@ DRIVER5=sf_smac
 DRIVER6=openwrt-x2880-driver
 OPENWRT5=openwrt-18.06
 OPENWRT6=Openwrt-master
-LMAC5=wireless-sw-sfax8
-LMAC6=wireless-sw-x2880
+LMAC5=Firmware5
+LMAC6=Firmware6
 
 REPO=-1
 set_REPO_based_on_dir() {
@@ -149,9 +149,40 @@ set_REPO_based_on_dir() {
 }
 export PROMPT_COMMAND="set_REPO_based_on_dir"
 
-if [[ ":$PATH:" != *":/home/SIFLOWER/jinke.liu/tools/Bear"* ]]; then
-    export PATH="$PATH:/home/SIFLOWER/jinke.liu/tools/Bear"
-fi
+
+
+## 1.0 Path Management
+path_ls() {
+    echo "$PATH" | tr ':' '\n'
+}
+
+##### only and once
+path_add() {
+    case ":$PATH:" in
+        *":$1:"*) ;;
+        *) export PATH="$PATH:$1" ;;
+    esac
+}
+
+path_remove() {
+    local p="$1"
+    PATH=":$PATH:"             # 前后加冒号，方便匹配
+    PATH="${PATH//:$p:/\:}"    # 删除中间或开头
+    PATH="${PATH#:}"           # 去掉开头冒号
+    PATH="${PATH%:}"           # 去掉结尾冒号
+}
+
+IMGT_MIPS_GCC_BIN="/opt/imgtec/Toolchains/mips-img-elf/2016.05-03/bin"
+GIT_BIN="/mnt/d/Program Files/Git/cmd"
+VSCODE_BIN="/mnt/d/Program Files/Microsoft VS Code/bin"
+ARM_GCC_BIN="/opt/arm_toolchain/gcc-arm-none-eabi-10.3-2021.10/bin/"
+
+
+path_add "$IMGT_MIPS_GCC_BIN"
+path_add "$ARM_GCC_BIN"
+##### rm these path which contain space so that WiFi6 umac can be compiled successfully
+path_remove "$GIT_BIN"
+path_remove "$VSCODE_BIN"
 
 # cscope，暂时无法使用
 # CSCOPE_DB="/home/SIFLOWER/jinke.liu/code/6wifi/Openwrt-master/cscope.out"
@@ -348,6 +379,11 @@ alias cv='code ~/.vimrc'
 alias md="md5sum"
 alias a='alias'
 alias his='history'
+alias rl='readlink -f'
+function new() {
+    touch $1 && chmod 777 $1
+    code $1
+}
 
 
 
@@ -470,10 +506,10 @@ gpn() {
 
 gps() {
     local remotes_brc_name=$(git branch -avv | grep '*' | awk -F'[][]' '{print $2}' | awk -F'[/:]' '{print $2}')
-    if [ $(whoami) == "root" ]; then
-        git push origin $remotes_brc_name
-    else
+    if [ $(whoami) == "jinke.liu" ]; then
         git push origin HEAD:refs/for/$remotes_brc_name
+    else
+        git push origin $remotes_brc_name
     fi
 }
 
@@ -688,8 +724,6 @@ function gengl() {
 }
 
 ##### Bear
-alias br='bear -l /home/SIFLOWER/jinke.liu/tools/Bear/libear.so'
-
 function mcc() {
     if [ $REPO -eq 1 ]; then
     ~/tools/Bear/modify_cc_json.sh
@@ -913,18 +947,6 @@ fi
 # export http_proxy=http://172.19.208.1:7897
 # export https_proxy=http://172.19.208.1:7897
 # export all_proxy=http://172.19.208.1:7897
-
-if [[ ":$PATH:" != *":/opt/Xuantie-900-gcc-elf-newlib-x86_64-V2.2.5/bin"* ]]; then
-    export PATH="$PATH:/opt/Xuantie-900-gcc-elf-newlib-x86_64-V2.2.5/bin"
-fi
-
-if [[ ":$PATH:" != *":/opt/imgtec/Toolchains/mips-img-elf/2016.05-03/bin"* ]]; then
-    export PATH="$PATH:/opt/imgtec/Toolchains/mips-img-elf/2016.05-03/bin"
-fi
-
-if [[ ":$PATH:" != *":/root/.local/bin"* ]]; then
-    export PATH="$PATH:/root/.local/bin"
-fi
 
 function by() {
     if [ $REPO -eq 3 ]; then
