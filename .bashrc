@@ -477,7 +477,7 @@ function fp() {
 
 
 alias gs='git status -uno'
-alias gsv='git status'
+alias gsv='git status --untracked-files=all'
 alias gd='git diff'
 alias gp='git pull'
 alias gr='git remote'
@@ -485,8 +485,21 @@ alias grv='git remote -v'
 alias gc='git checkout'
 alias gcb='git checkout -b' # gcb branch_name origin/remote_branch---拉取远程分支到本地，取名为branch_name
 alias gba='git branch -avv'
-alias gl='git log'
-alias p='git show -p'
+alias gl="git log --pretty=format:'%C(yellow)%h%Creset %C(blue)%an%Creset %C(green)%ad%Creset%n    %s%n' --date=format:'%Y.%m.%d'"
+alias gln='gl --name-status'
+#### 查找提交内容中包含字眼X的提交
+alias gls='gl -S'
+#### 查找X文件初次被创建的提交
+alias glf='gln --diff-filter=A --'
+function p() {
+    if [ $# -eq 0 ]; then
+        git show --pretty=format:'%C(yellow)%h%Creset %C(blue)%an%Creset %C(green)%ad%Creset%n    %s%n' --date=format:'%Y.%m.%d' --name-status
+    elif [ $# -eq 1 ]; then
+        git show --pretty=format:'%C(yellow)%h%Creset %C(blue)%an%Creset %C(green)%ad%Creset%n    %s%n' --date=format:'%Y.%m.%d' --stat -p "$1"
+    else
+        git show --pretty=format:'%C(yellow)%h%Creset %C(blue)%an%Creset %C(green)%ad%Creset%n    %s%n' --date=format:'%Y.%m.%d' "$1" -- "$2"
+    fi
+}
 alias gst='git stash'
 alias save='function _save() { commit_hash=$(git rev-parse --short=7 HEAD); git stash save "$1-$commit_hash"; }; _save' # save XXX = git stash save XXX-commit_hash[0-7]
 alias list='git stash list'
@@ -496,6 +509,7 @@ alias gcm='git commit -s -m'
 alias cx1='git reset HEAD~1' # 撤销最新的一个提交（撤销git commit和git add）
 alias ht='git reset --hard'
 alias gir='git init && git add . && git commit -m "init" >/dev/null 2>&1 && echo "done!"' #新建仓库
+alias gcp='git cherry-pick'
 
 gpn() {
     if [ -z "\$1" ]; then
@@ -605,6 +619,7 @@ alias mc1-='mc-'
 
 ##### hostapd---usr/bin/wpad
 alias hh='cd package/network/services/hostapd'
+alias hc='make package/network/services/hostapd/clean'
 
 function h() {
     make package/network/services/hostapd/compile -j32
@@ -676,15 +691,41 @@ alias mhi-='cd build_dir/target-*/linux-*/hello* && ls'
 
 
 
-## 1.7 Disassemble,
+## 1.7 Disassemble
 
 
 ##### use @Openwrt-master---反汇编文件采用覆盖机制，每次生成反汇编文件前记得保存之前的反汇编文件
-##### WiFi5 可能需要使用.o文件进行反汇编，因为ko文件中没有足够的符号信息
-alias fhb='./staging_dir/toolchain*/bin/*musl-objdump -dlS./staging_dir/toolchain*/bin/*musl-objdump -dlS  ./staging_dir/target*/root-siflower/lib/modules/*/*fmac.ko > wifi.s && echo ok && code wifi.s'
-alias fhbf='./staging_dir/toolchain*/bin/*musl-objdump -dlS' # 指定文件进行反汇编
-alias fhbb='./staging_dir/toolchain*/bin/*musl-objdump -dlS ./staging_dir/target*/root-siflower/lib/modules/*/cfg80211.ko > backport.s && echo ok && code backport.s'
-alias fhbkn='./staging_dir/toolchain*/bin/*musl-objdump -dlS ./sf_kernel/linux-5.10/vmlinux > kn.s && echo ok && code kn.s'
+function fhb() {
+    local objdump=./staging_dir/toolchain*/bin/*musl-objdump
+
+    case "$1" in
+        ""|u|umac)
+            if [ "$REPO" == 1 ]; then
+            local ko=./staging_dir/target*/root-siflower/lib/modules/*/*fmac.ko
+            else
+            local ko=./build_dir/target*/linux*/sf_smac/fmac/*fmac.o
+            fi
+            $objdump -dlS $ko > umac.s && echo "✓ umac.s" && code umac.s
+            ;;
+        b|backport)
+            local ko=./staging_dir/target*/root-siflower/lib/modules/*/cfg80211.ko
+            $objdump -dlS $ko > backport.s && echo "✓ backport.s" && code backport.s
+            ;;
+        kn|kernel)
+            $objdump -dlS ./sf_kernel/linux-5.10/vmlinux > kn.s && echo "✓ kn.s" && code kn.s
+            ;;
+        -h|help)
+            echo "fhb [u|b|kn|文件]"
+            ;;
+        *)
+            if [ -f "$1" ]; then
+                $objdump -dlS $1 > "$(basename "$1").s" && echo "✓ $(basename "$1").s" && code "$(basename "$1").s"
+            else
+                echo "错误: 文件不存在或参数错误"
+            fi
+            ;;
+    esac
+}
 
 
 
