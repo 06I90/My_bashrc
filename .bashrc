@@ -216,6 +216,7 @@ g() {
 EXCLUDE=(
   --exclude '*.o.cmd'
   --exclude 'dictionary'
+  --exclude '*.py'
   --exclude '*.js'
   --exclude '*.map'
   --exclude '*.symvers'
@@ -227,6 +228,7 @@ EXCLUDE=(
   --exclude 'sf2880_c906_map'
   --exclude 'sf1688_map'
   --exclude 'sf2880_c906_readelf'
+  --exclude-dir 'softmac'
 )
 
 function f() {
@@ -244,8 +246,8 @@ function ffd() {
               "${EXCLUDE[@]}" \
               -e "$@" \
     | grep -v ");" \
-    | grep -v "=" \
-    | grep -v "if "
+    | grep -v " = " \
+    | grep -v " if "
 }
 
 function wfd() {
@@ -254,9 +256,9 @@ function wfd() {
               "${EXCLUDE[@]}" \
               -e "$@" \
     | grep -v ");" \
-    | grep -v "=" \
-    | grep -v "if (" \
-    | grep -v "if("
+    | grep -v " = " \
+    | grep -v " if " \
+    | grep -v "!"
 }
 
 ##### 在linux仓库使用，排除架构不相关的源码，如果是riscv架构，在./arch目录下只在./arch/riscv下搜索
@@ -633,9 +635,9 @@ alias n-='cd build_dir/target-*/netifd-* && ls'
 
 ##### backports---lib/modules/5.10.104+/cfg80211.ko
 alias bb='cd package/kernel/mac80211'
-alias b='make package/kernel/mac80211/compile -j32 && b- > /dev/null && md cfg80211.ko && t'
-alias b1='make package/kernel/mac80211/compile -j1 V=sc && b- > /dev/null && md cfg80211.ko && t'
-alias b-='cd build_dir/target-*/linux-*/backports-*/net/wireless && ls'
+alias b='make package/kernel/mac80211/compile -j32 && b- > /dev/null && cd ./net/wireless > /dev/null && md cfg80211.ko && t'
+alias b1='make package/kernel/mac80211/compile -j1 V=sc && b- > /dev/null && && cd net/wireless > /dev/null && md cfg80211.ko && t'
+alias b-='cd build_dir/target-*/linux-*/backports-* && ls'
 
 ##### sfwifi_iface---usr/bin/sfwifi_iface
 alias ii='cd package/siflower/bin/sfwifi_iface/src'
@@ -674,7 +676,7 @@ alias mhi-='cd build_dir/target-*/linux-*/hello* && ls'
 
 ##### use @Openwrt-master---反汇编文件采用覆盖机制，每次生成反汇编文件前记得保存之前的反汇编文件
 ##### WiFi5 可能需要使用.o文件进行反汇编，因为ko文件中没有足够的符号信息
-alias fhb='./staging_dir/toolchain*/bin/*musl-objdump -dlS  ./staging_dir/target*/root-siflower/lib/modules/*/*fmac.ko > wifi.s && echo ok && code wifi.s'
+alias fhb='./staging_dir/toolchain*/bin/*musl-objdump -dlS./staging_dir/toolchain*/bin/*musl-objdump -dlS  ./staging_dir/target*/root-siflower/lib/modules/*/*fmac.ko > wifi.s && echo ok && code wifi.s'
 alias fhbf='./staging_dir/toolchain*/bin/*musl-objdump -dlS' # 指定文件进行反汇编
 alias fhbb='./staging_dir/toolchain*/bin/*musl-objdump -dlS ./staging_dir/target*/root-siflower/lib/modules/*/cfg80211.ko > backport.s && echo ok && code backport.s'
 alias fhbkn='./staging_dir/toolchain*/bin/*musl-objdump -dlS ./sf_kernel/linux-5.10/vmlinux > kn.s && echo ok && code kn.s'
@@ -734,6 +736,23 @@ function mcc() {
     fi
 }
 
+#### profile
+function pf() {
+    change_directory "$HOME/mytools/EasyBoard/" "$HOME/mytools/EasyBoard/5wifi/"
+    code profile
+    r
+}
+
+function upf() {
+    if [ $REPO -eq 1 ]; then
+    cp /home/SIFLOWER/jinke.liu/mytools/EasyBoard/profile ./package/base-files/files/etc/profile
+    elif [ $REPO -eq 0 ]; then
+    cp /home/SIFLOWER/jinke.liu/mytools/EasyBoard/5wifi/profile ./package/base-files/files/etc/profile
+    else
+        echo "Unmatched: current directory does not match any conditions"
+    fi
+}
+
 
 
 ## 1.9 Patch
@@ -762,6 +781,7 @@ function th() {
 function tb() {
     ~/mytools/Trans/trans.sh backports cfg80211.ko              # 传输  mac80211 的 cfg80211.ko
     b- > /dev/null 2>&1
+    cd ./net/wireless > /dev/null
     md cfg80211.ko
     t
 }
