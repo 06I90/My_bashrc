@@ -351,6 +351,7 @@ alias md="md5sum"
 alias a='alias'
 alias his='history'
 alias rl='readlink -f'
+alias sfmt='shfmt -w -i 4'
 function new() {
     touch $1 && chmod 777 $1 && code $1
 }
@@ -967,3 +968,102 @@ fi
 # --- End Auto WSL Git Branch Switch ---
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
+
+
+
+###################################### 待整理 ######################################
+##### opencapwap---usr/bin/
+alias ac='cd package/network/services/opencapwap'
+alias uci='cd package/siflower/bin/ac_uci_ctl'
+
+function mac() {
+    make package/network/services/opencapwap/compile -j32
+    mac- > /dev/null
+    md AC WTP WUA WUM
+    t
+}
+
+function mac1() {
+    make package/network/services/opencapwap/compile -j1 V=sc
+    mac- > /dev/null
+    md AC WTP WUA WUM
+    t
+}
+
+function mac-() {
+    local current_dir=$PWD
+
+    if [[ "$current_dir" == *$OPENWRT6* ]]; then
+        cd build_dir/target-*/opencapwap && ls
+    elif [[ "$current_dir" == *$OPENWRT5* ]]; then
+        cd build_dir/target-*/opencapwap && ls
+    else
+        echo "Current directory does not match any known patterns."
+    fi
+    ls | grep -Ew "AC|WTP|WUA|WUM"
+}
+
+function muci() {
+    make package/siflower/bin/ac_uci_ctl/compile -j32
+    muci- > /dev/null
+    md ac_uci_ctl
+    t
+}
+
+function muci1() {
+    make package/siflower/bin/ac_uci_ctl/compile -j1 V=sc
+    muci- > /dev/null
+    md ac_uci_ctl
+    t
+}
+
+function muci-() {
+    local current_dir=$PWD
+
+    if [[ "$current_dir" == *$OPENWRT6* ]]; then
+        cd build_dir/target-*/ac_uci_ctl && ls
+    elif [[ "$current_dir" == *$OPENWRT5* ]]; then
+        cd build_dir/target-*/ac_uci_ctl && ls
+    else
+        echo "Current directory does not match any known patterns."
+    fi
+    ls | grep -Ew "ac_uci_ctl"
+}
+
+function ta() {
+    ~/mytools/Trans/trans.sh hostapd wpad                       # 传输  hostapd 的 wpad
+    mac- > /dev/null 2>&1
+    md AC WTP WUM
+    t
+}
+
+##### sync patches
+function cdd() {
+    code -d $1 /home/SIFLOWER/jinke.liu/code/241_sg/Openwrt-master/$1
+}
+function cdd1() {
+    code -d /home/SIFLOWER/jinke.liu/code/241_sg/Openwrt-master/$1 $1
+}
+
+alias tq='cd ./package/kernel/sfwifi/'
+
+alias hh='cd package/network/services/hostapd/patches'
+alias hc='make package/network/services/hostapd/clean'
+
+function h() {
+    make package/network/services/hostapd/compile -j32
+}
+
+function h1() {
+    make package/network/services/hostapd/compile -j1 V=sc
+}
+
+function h-() {
+    cd build_dir/target-*/hostapd-*/hostapd-* && ls
+}
+
+##### backports---lib/modules/5.10.104+/cfg80211.ko
+alias bb='cd package/kernel/mac80211/patches/siflower'
+alias b='make package/kernel/mac80211/compile -j32'
+alias b1='make package/kernel/mac80211/compile -j1 V=sc'
+alias b-='cd build_dir/target-*/linux-*/backports-*'
