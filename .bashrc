@@ -351,6 +351,7 @@ alias md="md5sum"
 alias a='alias'
 alias his='history'
 alias rl='readlink -f'
+alias sfmt='shfmt -w -i 4'
 function new() {
     touch $1 && chmod 777 $1 && code $1
 }
