@@ -383,8 +383,7 @@ alias a='alias'
 alias his='history'
 alias rl='readlink -f'
 function new() {
-    touch $1 && chmod 777 $1
-    code $1
+    touch $1 && chmod 777 $1 && code $1
 }
 
 
@@ -836,6 +835,13 @@ alias tn='~/mytools/Trans/trans.sh netifd netifd'               # 传输  netifd
 
 function ti() {                                                 # 传输镜像，Usage: ti [prefix]
     ~/mytools/Trans/trans.sh image image $1
+}
+
+function thi() {
+    ~/mytools/Trans/trans.sh hello hello.ko                     # 传输  hello 的 ko
+    mhi- > /dev/null 2>&1
+    md hello.ko
+    t
 }
 
 
